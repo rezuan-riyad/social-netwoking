@@ -13,6 +13,7 @@ const {
   updatePost,
   deletePost } = require('../controllers/postController')
 
+// routes for posts
 router.get('/', authenticateJWT, getAllPosts)
 router.get('/:postId', authenticateJWT, getPostById)
 router.post('/create', authenticateJWT, createPost)
