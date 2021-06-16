@@ -24,5 +24,6 @@
 
 ### Will be added
 1. Follow/Unfollow feature
-2. Add refresh token  
-3. Chating system (socket.io)
+2. Refresh Token
+3. Express-Validation
+4. Chating system (socket.io)
