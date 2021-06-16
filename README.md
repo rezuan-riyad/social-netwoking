@@ -1,8 +1,8 @@
-## MongoDB, Express Social Media Api
-### Schemas
+### MongoDB, Express Social Media Api
+## Schemas
 1. Schema for User and Schema for Post with comment sub-document
 
-### Features
+## Features
 **Post Controller**
 1. Create user
 2. Login user
@@ -22,7 +22,7 @@
 3. Commenter edits his own comment by postid & commentId
 4. Commenter & Author delete comment in a post
 
-### Will be added
+## Will be added
 1. Follow/Unfollow feature
 2. Refresh Token
 3. Express-Validation
