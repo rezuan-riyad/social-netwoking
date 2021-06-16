@@ -1,6 +1,6 @@
 ## MongoDB, Express Social Media Api
 ### Schemas
-..* Schema for User and Schema for Post with comment sub-document
+1. Schema for User and Schema for Post with comment sub-document
 
 ### Features
 **Post Controller**
