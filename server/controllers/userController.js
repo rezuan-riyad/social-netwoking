@@ -17,6 +17,7 @@ exports.getProfile = async function (req, res, next) {
     const user = await User.findOne({ username })
     if (user) {
       const posts = await Post.find({ author: user._id })
+        .populate('author', 'username')
 
       return res.status(200).json({
         user: {
@@ -30,6 +31,28 @@ exports.getProfile = async function (req, res, next) {
       next(new Error('Invalid URL'))
     }
   } catch (error) {
+    next(error)
+  }
+}
+
+/*
+  @desc get all users
+  @route POST /api/users/
+  @access Public
+*/
+exports.getAllUsers = async function(req, res, next){
+  try {
+    const users = await User.find()
+    if(users){
+      const _users = users.map(user => {
+        return new Object({
+          username: user.username,
+          _id: user._id
+        })
+      })
+      return res.status(200).json({ users: _users })
+    }
+  } catch(error){
     next(error)
   }
 }
@@ -76,7 +99,7 @@ exports.createUser = async function (req, res, next) {
 }
 
 /*
-  @desc user login 
+  @desc user login
   @route POST /api/user/login
   @access Public
 */

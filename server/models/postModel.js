@@ -29,13 +29,15 @@ const postSchema = new Schema({
     required: true
   },
   comments: [commentSchema],
-  likers: {
-    type: [String],
-  },
+  likers: [String],
   totalLikes: {
     type: Number,
     required: true,
     default: 0
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 }, { timestamps: true })
 

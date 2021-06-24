@@ -9,6 +9,7 @@ exports.getAllPosts = async function (req, res, next) {
   Post.find()
     .populate('author', 'username')
     .populate('comments.commentedBy', 'username')
+    .sort({ date : -1 })
     .exec((error, posts) => {
       if (error) next(error)
       else if (posts) {
@@ -49,15 +50,17 @@ exports.createPost = async function (req, res, next) {
       author: req.user._id
     })
 
-    if (newPost) {
-      return res.status(200).json({ post: newPost })
+    const post = await newPost.populate('author').execPopulate()
+
+    if (post) {
+      return res.status(200).json({ post })
     }
   } catch (error) {
     next(error)
   }
 }
 
-/* 
+/*
   @desc update a post by id (only author)
   @route PUT /api/post/:postId
   @access Private
@@ -90,7 +93,7 @@ exports.updatePost = async function (req, res, next) {
   }
 }
 
-/* 
+/*
   @desc delete a post by id (only author)
   @route DELETE /api/post/:postId
   @access Private
@@ -120,7 +123,7 @@ exports.deletePost = async function (req, res, next) {
 */
 exports.reactionToPost = async function (req, res, next) {
   const postId = req.params.postId
-  const perpatrator = req.user.username  // :)
+  const perpatrator = req.user.username  // :-)
 
   try{
     let update, message
@@ -137,10 +140,10 @@ exports.reactionToPost = async function (req, res, next) {
       }
       message = 'Like Removed.'
     }
-    const post = await Post.findByIdAndUpdate( postId, update, { new: true })
+    const post = await Post.findByIdAndUpdate( { _id: postId }, update, { new: true })
     if(post) {
-      return res.status(200).json({ post })
-    } 
+      return res.status(200).json({ likers: post.likers, totalLikes: post.totalLikes, message })
+    }
   }catch(error){
     next(error)
   }

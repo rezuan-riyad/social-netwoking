@@ -11,7 +11,8 @@ const {
   getAllPosts,
   getPostById,
   updatePost,
-  deletePost } = require('../controllers/postController')
+  deletePost,
+  reactionToPost } = require('../controllers/postController')
 
 // routes for posts
 router.get('/', authenticateJWT, getAllPosts)
@@ -25,5 +26,8 @@ router.get('/:postId/comment', authenticateJWT, getAllComments)
 router.put('/:postId/comment', authenticateJWT, addComment)
 router.put('/:postId/comment/:commentId', authenticateJWT, updateComment)
 router.delete('/:postId/comment/:commentId', authenticateJWT, deleteComment)
+
+// routers for add or remove like
+router.patch('/:postId', authenticateJWT, reactionToPost)
 
 module.exports = router

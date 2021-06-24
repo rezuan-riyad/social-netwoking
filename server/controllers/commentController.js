@@ -28,14 +28,15 @@ exports.getAllComments = async function (req, res, next) {
 }
 
 
-/* 
+/*
   @desc create a comment
   @route PUT /api/post/:postId/comment
-  @access Private 
+  @access Private
 */
 // To add comment, we are updating post
 exports.addComment = async function (req, res, next) {
   const postId = req.params.postId
+  const query = { _id: postId }
   const update = {
     $push: {
       comments: {
@@ -46,11 +47,11 @@ exports.addComment = async function (req, res, next) {
   }
 
   try {
-    const newPost = await Post.findOneAndUpdate(postId, update, { new: true })
+    const updatedPost = await Post.findOneAndUpdate(query, update, { new: true })
       .populate('comments.commentedBy', 'username')
 
-    if (newPost) {
-      return res.status(200).json({ newPost })
+    if (updatedPost) {
+      return res.status(200).json({ comments: updatedPost.comments })
     } else {
       next(new Error('Something Wrong'))
     }
@@ -59,7 +60,7 @@ exports.addComment = async function (req, res, next) {
   }
 }
 
-/* 
+/*
   @desc update a comment
   @route PUT /api/post/:postId/comment/:commentId
   @access Private (commenter only)
@@ -67,7 +68,7 @@ exports.addComment = async function (req, res, next) {
 exports.updateComment = async function (req, res, next) {
   const { postId, commentId } = req.params
   try {
-    //find post by postId 
+    //find post by postId
     const post = await Post.findById(postId)
     if(!post){
       res.status(404)
@@ -82,8 +83,8 @@ exports.updateComment = async function (req, res, next) {
     }
 
     const isCommenter = comment.commentedBy.equals(req.user._id)
-    
-    // commenter is only allowed to edit comment.    
+
+    // commenter is only allowed to edit comment.
     if (isCommenter) {
       comment.content = req.body.content
       const edited = await post.save()
@@ -102,10 +103,10 @@ exports.updateComment = async function (req, res, next) {
   }
 }
 
-/* 
+/*
   @desc delete a comment
   @route DELETE /api/post/:postId/comment/:commentId
-  @access Private 
+  @access Private
 */
 exports.deleteComment = async function (req, res, next) {
   const { postId, commentId } = req.params
