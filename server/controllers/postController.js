@@ -28,7 +28,10 @@ exports.getPostById = async function (req, res, next) {
     .populate('author', 'username')
     .populate('comments.commentedBy', 'username')
     .exec((error, post) => {
-      if (error) next(error)
+      if (error) {
+        res.status(404)
+        return next(new Error('Not Found'))
+      }
       else if (post) {
         return res.status(200).json({ post })
       }
@@ -42,11 +45,15 @@ exports.getPostById = async function (req, res, next) {
   @access Private
 */
 exports.createPost = async function (req, res, next) {
+  const { title, content } = req.body
+  if (!title || !content) {
+    res.status(400)
+    return next(new Error('title and content value are required.'))
+  }
 
   try {
     const newPost = await Post.create({
-      title: req.body.title,
-      content: req.body.content,
+      title, content,
       author: req.user._id
     })
 
@@ -69,9 +76,8 @@ exports.createPost = async function (req, res, next) {
 exports.updatePost = async function (req, res, next) {
   const { title, content } = req.body
   if (!title || !content) {
-    const error = new Error('title and content are required.')
     res.status(400)
-    return next(error)
+    return next(new Error('title and content value are required.'))
   }
   const query = {
     _id: req.params.postId,

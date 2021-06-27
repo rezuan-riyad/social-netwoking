@@ -35,6 +35,9 @@ exports.getAllComments = async function (req, res, next) {
 */
 // To add comment, we are updating post
 exports.addComment = async function (req, res, next) {
+  if(!req.body.content){
+    return res.status(400).json({ message: 'Content is Empty.' })
+  }
   const postId = req.params.postId
   const query = { _id: postId }
   const update = {
