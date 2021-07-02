@@ -1,6 +1,12 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
+function checkExpiration(){
+  const expiresIn = JSON.parse(localStorage.getItem('date')) + 1
+  const dateNow = new Date().getDate()
+}
+
+
 function PrivateRoute({ component: Component, ...rest }) {
 
   return <Route {...rest} component={(props) => {

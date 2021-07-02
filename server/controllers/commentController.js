@@ -1,10 +1,10 @@
 const Post = require('../models/postModel')
 
-/*
-  @desc find post by id, then populate commentedBy property
-  @route GET /api/post/:postId/comment
-  @access Private
-*/
+/**
+ * @desc find post by id, then populate commentedBy property
+ * @route GET /api/post/:postId/comment
+ * @access Private 
+ */
 exports.getAllComments = async function (req, res, next) {
   const postId = req.params.postId
   try {
@@ -28,14 +28,14 @@ exports.getAllComments = async function (req, res, next) {
 }
 
 
-/*
-  @desc create a comment
-  @route PUT /api/post/:postId/comment
-  @access Private
-*/
+/**
+ * @desc create a comment
+ * @route PUT /api/post/:postId/comment
+ * @access Private
+ */
 // To add comment, we are updating post
 exports.addComment = async function (req, res, next) {
-  if(!req.body.content){
+  if (!req.body.content) {
     return res.status(400).json({ message: 'Content is Empty.' })
   }
   const postId = req.params.postId
@@ -63,24 +63,24 @@ exports.addComment = async function (req, res, next) {
   }
 }
 
-/*
-  @desc update a comment
-  @route PUT /api/post/:postId/comment/:commentId
-  @access Private (commenter only)
-*/
+/**
+ * @desc update a comment
+ * @route PUT /api/post/:postId/comment/:commentId
+ * @access Private (commenter only)
+ */
 exports.updateComment = async function (req, res, next) {
   const { postId, commentId } = req.params
   try {
     //find post by postId
     const post = await Post.findById(postId)
-    if(!post){
+    if (!post) {
       res.status(404)
       throw new Error('Post doesn\'t exist.')
     }
 
     //find comment by commentId
     const comment = await post.comments.id(commentId)
-    if(!comment){
+    if (!comment) {
       res.status(404)
       throw new Error('Comment doesn\'t exist.')
     }
@@ -93,9 +93,6 @@ exports.updateComment = async function (req, res, next) {
       const edited = await post.save()
       if (edited) {
         return res.status(200).json({ message: "Comment Edited Successfully." })
-      } else {
-        res.status(400)
-        throw new Error('Something Went Wrong.')
       }
     } else {
       res.status(401)
@@ -106,24 +103,24 @@ exports.updateComment = async function (req, res, next) {
   }
 }
 
-/*
-  @desc delete a comment
-  @route DELETE /api/post/:postId/comment/:commentId
-  @access Private
-*/
+/**
+ * @desc delete a comment
+ * @route DELETE /api/post/:postId/comment/:commentId
+ * @access Private
+ */
 exports.deleteComment = async function (req, res, next) {
   const { postId, commentId } = req.params
   try {
     //find post by postId
     const post = await Post.findById(postId)
-    if(!post){
+    if (!post) {
       res.status(404)
       throw new Error('Post doesn\'t exist.')
     }
 
     // find comment by commentId
     const comment = await post.comments.id(commentId)
-    if(!comment){
+    if (!comment) {
       res.status(404)
       throw new Error('Comment doesn\'t exist.')
     }
@@ -134,7 +131,7 @@ exports.deleteComment = async function (req, res, next) {
     // commenter and author, allowed to delete comment.
     if (isCommenter || isAuthor) {
       const deleted = await comment.remove()
-      if(deleted){
+      if (deleted) {
         const _post = await post.save()
         res.status(200).json({ message: "Comment deleted successfully." })
       }

@@ -6,10 +6,11 @@ import EditForm from '../components/EditForm'
 import NotFound from '../components/NotFound'
 import Fallback from '../components/Fallback'
 import { useParams, useHistory } from 'react-router-dom'
-import { getSinglePostById, addComment, updatePost, deletePost } from '../actions/postAction'
 import { useDispatch, useSelector } from 'react-redux'
 import { timeFormatter } from '../utils/timeFormatter'
 import { POST_INITIAL_STATE } from '../constants/constants'
+import { getSinglePostById, addComment, updatePost, 
+  deletePost, updateComment, deleteComment } from '../actions/postAction'
 
 
 export default function SinglePostPage() {
@@ -56,13 +57,23 @@ export default function SinglePostPage() {
     }
   }
 
+  const handleEditComment = (commentId, content) => {
+    dispatch(updateComment(id, commentId, content))
+  }
+
+  const handleDeleteComment = (commentId) => {
+    dispatch(deleteComment(id, commentId))
+  }
+
   let renderComments
   if (post.comments.length !== 0) {
     renderComments = post.comments.map(comment => {
       return <CommentBox
         key={comment._id}
         comment={comment}
-        author={post.author.username} />
+        author={post.author.username}
+        handleEditComment={handleEditComment}
+        handleDeleteComment={handleDeleteComment} />
     })
   }
 

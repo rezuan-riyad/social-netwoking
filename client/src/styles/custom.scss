@@ -155,7 +155,7 @@ nav {
 .author-card {
   display: inline-block;
   margin: 20px;
-  min-width: 300px;
+  min-width: 350px;
   padding-top:0;
   padding-bottom: 25px;
 }
@@ -165,15 +165,19 @@ nav {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-
-  @media only screen and (max-width: 600px) {
-    .author-card{
-      display: flex;
-      flex-direction: column;
-      button{
-        width: 100%;
-        margin-top: 10px;
-      }
+}
+@media only screen and (max-width: 600px) {
+  .author-card{
+    min-width: 300px;
+    margin: 10px auto;
+  }
+  
+  .author-card-btns{
+    display: flex;
+    flex-direction: column;
+    button, a{
+      width: 100% !important;
+      margin-top: 5px;
     }
   }
 }

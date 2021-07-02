@@ -107,6 +107,9 @@ export default function Login() {
       if (resData && res.status === 200) {
         localStorage.setItem('token', JSON.stringify(resData.token))
         localStorage.setItem('user', JSON.stringify(resData.username))
+        
+        const date = new Date().getDate()
+        localStorage.setItem('date', JSON.stringify(date))
         dispatch({ type: 'REQ/SUCCESS' })
       }
     } catch (error) {

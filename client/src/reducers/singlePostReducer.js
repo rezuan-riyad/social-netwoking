@@ -5,6 +5,8 @@ const postState = {
   isUpdating: false,
   isDeleting: false,
   commentAdding: false,
+  commentUpdating: false,
+  commentDeleting: false,
   notFound: false,
   isLiked: null,
   post: {
@@ -25,6 +27,7 @@ const postState = {
 export default function singlePostReducer(state = postState, action) {
   switch (action.type) {
 
+    // 1. State update by GETTING POST
     case C.GET_SINGLE_POST:
       return {
         ...state,
@@ -60,7 +63,8 @@ export default function singlePostReducer(state = postState, action) {
       }
     case C.POST_INITIAL_STATE:
       return postState
-
+    
+    // 2. State update by ADDING COMMENT
     case C.ADD_COMMENT_REQ:
       return {
         ...state,
@@ -76,13 +80,13 @@ export default function singlePostReducer(state = postState, action) {
         commentAdding: false,
         post: newPost
       }
-
     case C.ADD_COMMENT_FAILED:
       return {
         ...state,
         commentAdding: false,
       }
-
+    
+    // 3. State update for adding or removing like actions
     case C.SINGLE_POST_LIKE_HANDLE:
       return {
         ...state,
@@ -94,13 +98,14 @@ export default function singlePostReducer(state = postState, action) {
         isLiked: action.payload.data.likers.includes(state.localUser.username)
       }
     
+    // 4. state update for Post Edit actions
     case C.SINGLE_POST_UPDATE:
       return {
         ...state,
         isUpdating: true
       }
     case C.SINGLE_POST_UPDATE_SUCCESS:
-      return{
+      return {
         ...state,
         isUpdating: false,
         post: {
@@ -114,6 +119,8 @@ export default function singlePostReducer(state = postState, action) {
         ...state,
         isUpdating: false
       }
+    
+    // 5. state update for post delete actions
     case C.SINGLE_POST_DELETE:
       return {
         ...state,
@@ -129,6 +136,55 @@ export default function singlePostReducer(state = postState, action) {
       return {
         ...state,
         isDeleting: false
+      }
+    
+    // 6. State update for editing comment of a particular post
+    case C.UPDATE_COMMENT:
+      return {
+        ...state,
+        commentUpdating: true
+      }
+    case C.UPDATE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        commentUpdating: false,
+        post: {
+          ...state.post,
+          comments: state.post.comments.map( comment => {
+            if(comment._id === action.payload.commentId){
+              comment.content = action.payload.content
+            }
+            return comment
+          })
+        }
+      }
+    case C.UPDATE_COMMENT_FAILED:
+      return {
+        ...state,
+        commentUpdating: true
+      }
+    
+    // 7. State update for deleting a comment
+    case C.DELETE_COMMENT:
+      return {
+        ...state,
+        commentDeleting: true
+      }
+    case C.DELETE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        commentDeleting: false,
+        post: {
+          ...state.post,
+          comments: state.post.comments.filter( comment => {
+            return comment._id !== action.payload
+          })
+        }
+      }
+    case C.DELETE_COMMENT_FAILED:
+      return {
+        ...state,
+        commentDeleting: false
       }
     default:
       return state

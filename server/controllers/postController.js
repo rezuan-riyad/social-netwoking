@@ -1,10 +1,10 @@
 const Post = require('../models/postModel')
 
-/*
-  @desc get all posts (all users)
-  @route GET /api/post
-  @access Private
-*/
+/**
+ * @desc get all posts (all users)
+ * @route GET /api/post
+ * @access Private
+ */
 exports.getAllPosts = async function (req, res, next) {
   Post.find()
     .populate('author', 'username')
@@ -18,11 +18,11 @@ exports.getAllPosts = async function (req, res, next) {
     })
 }
 
-/*
-  @desc get a post by id (all users)
-  @route GET /api/post/:postId
-  @access Private
-*/
+/**
+ * @desc get a post by id (all users)
+ * @route GET /api/post/:postId
+ * @access Private
+ */
 exports.getPostById = async function (req, res, next) {
   Post.findById(req.params.postId)
     .populate('author', 'username')
@@ -39,11 +39,11 @@ exports.getPostById = async function (req, res, next) {
 }
 
 
-/*
-  @desc create new post (all users)
-  @route POST /api/post/create
-  @access Private
-*/
+/**
+ * @desc create new post (all users)
+ * @route POST /api/post/create
+ * @access Private
+ */
 exports.createPost = async function (req, res, next) {
   const { title, content } = req.body
   if (!title || !content) {
@@ -67,11 +67,11 @@ exports.createPost = async function (req, res, next) {
   }
 }
 
-/*
-  @desc update a post by id (only author)
-  @route PUT /api/post/:postId
-  @access Private
-*/
+/**
+ * @desc update a post by id (only author)
+ * @route PUT /api/post/:postId
+ * @access Private
+ */
 
 exports.updatePost = async function (req, res, next) {
   const { title, content } = req.body
@@ -99,11 +99,11 @@ exports.updatePost = async function (req, res, next) {
   }
 }
 
-/*
-  @desc delete a post by id (only author)
-  @route DELETE /api/post/:postId
-  @access Private
-*/
+/** 
+ * @desc delete a post by id (only author)
+ * @route DELETE /api/post/:postId
+ * @access Private
+ */
 exports.deletePost = async function (req, res, next) {
   const query = {
     _id: req.params.postId,
@@ -122,11 +122,11 @@ exports.deletePost = async function (req, res, next) {
   }
 }
 
-/*
-  @desc increment/decrement likes and add/remvove likers
-  @route PATCH /api/post/:postId
-  @access Private
-*/
+/**
+ * @desc increment/decrement likes and add/remvove likers
+ * @route PATCH /api/post/:postId
+ * @access Private
+ */
 exports.reactionToPost = async function (req, res, next) {
   const postId = req.params.postId
   const perpatrator = req.user.username  // :-)

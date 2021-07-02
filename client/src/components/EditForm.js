@@ -22,22 +22,25 @@ export default function EditForm({ showEditBar, setShowEditBar, handlePostEdit }
     left: "0",
     bottom: "0",
     right: "0",
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "rgba(0,0,0,.7)",
     zIndex: "10"
   }
   const formStyle = {
     minWidth: "300px",
-    maxWidth: "600px",
+    maxWidth: "700px",
     heifht: "auto",
     padding: "20px",
+    backgroundColor: "#f7f7f7",
     margin: "auto",
     marginTop: "50px",
-    zIndex: "100000",
+    zIndex: "100000"
   }
   const btnStyle = { border: "1px solid lightgray", marginLeft: "20px" }
   return (
     <div style={backdropStyle}>
+
       <form id="editForm" style={formStyle} className="z-depth-1">
+        <h5 className="center">Edit Content</h5>
         {/* Edit Title Textarea*/}
         <span>Title:</span>
         <textarea className="materialize-textarea"

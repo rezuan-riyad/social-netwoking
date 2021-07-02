@@ -6,11 +6,11 @@ const User = require('../models/userModel')
 const { getAccessToken } = require('../utils/getAccessToken')
 
 
-/*
-  @desc get user profile and user's all posts
-  @route GET /api/user/:username
-  @access Private
-*/
+/**
+ * @desc get user profile and user's all posts
+ * @route GET /api/user/:username
+ * @access Private
+ */
 exports.getProfile = async function (req, res, next) {
   const { username } = req.params
   try {
@@ -35,11 +35,11 @@ exports.getProfile = async function (req, res, next) {
   }
 }
 
-/*
-  @desc get all users
-  @route POST /api/users/
-  @access Public
-*/
+/**
+ * @desc get all users
+ * @route POST /api/users/
+ * @access Public
+ */
 exports.getAllUsers = async function(req, res, next){
   try {
     const users = await User.find()
@@ -58,11 +58,11 @@ exports.getAllUsers = async function(req, res, next){
 }
 
 
-/*
-  @desc new user creation
-  @route POST /api/user/create
-  @access Public
-*/
+/**
+ * @desc new user creation
+ * @route POST /api/user/create
+ * @access Public
+ */
 
 exports.createUser = async function (req, res, next) {
   const { username, password } = req.body
@@ -98,11 +98,11 @@ exports.createUser = async function (req, res, next) {
   }
 }
 
-/*
-  @desc user login
-  @route POST /api/user/login
-  @access Public
-*/
+/** 
+ * @desc user login
+ * @route POST /api/user/login
+ * @access Public
+ */
 
 exports.login = async function (req, res, next) {
   const { username, password } = req.body

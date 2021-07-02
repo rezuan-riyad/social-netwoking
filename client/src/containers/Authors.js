@@ -18,6 +18,9 @@ export default function Authors(){
     <>
       <Layout>
         <div className="container center">
+          <form>
+            <input />
+          </form>
           {
             authors ?
             authors.map( author => {

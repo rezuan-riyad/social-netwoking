@@ -8,8 +8,8 @@ const axiosInstance = axios.create({
 
 export function createPost(post) {
   return async (dispatch) => {
-    dispatch({ type: C.SAVE_NEW_POST  })
-    
+    dispatch({ type: C.SAVE_NEW_POST })
+
     let token = JSON.parse(localStorage.getItem('token'))
     // url, data, headers
     axiosInstance.post('/post/create',
@@ -18,7 +18,7 @@ export function createPost(post) {
     )
       .then(res => res.data)
       .then(data => {
-        dispatch({ 
+        dispatch({
           type: C.SAVE_NEW_POST_SUCCESS,
           payload: data.post
         })
@@ -56,12 +56,12 @@ export function getSinglePostById(postId) {
   return async (dispatch) => {
 
     let localUser = JSON.parse(localStorage.getItem('user'))
-    dispatch({ 
+    dispatch({
       type: C.GET_SINGLE_POST,
       payload: localUser
     })
-    
-    
+
+
     let token = JSON.parse(localStorage.getItem('token'))
     axiosInstance.get(`/post/${postId}`, { headers: { 'Authorization': `Bearer ${token}` } })
       .then(res => res.data)
@@ -83,11 +83,11 @@ export function addOrRemoveLike(postId, action) {
   return async (dispatch) => {
     let token = JSON.parse(localStorage.getItem('token'))
     axiosInstance.patch(`/post/${postId}`, { action },
-      { headers: { 'Authorization': `Bearer ${token}` } }  
+      { headers: { 'Authorization': `Bearer ${token}` } }
     )
-      .then( res => res.data )
-      .then( data => {
-        dispatch({ 
+      .then(res => res.data)
+      .then(data => {
+        dispatch({
           type: C.ADD_OR_REMOVE_LIKE,
           payload: {
             _id: postId,
@@ -101,7 +101,7 @@ export function addOrRemoveLike(postId, action) {
           }
         })
       })
-      .catch( err => {
+      .catch(err => {
         // handle error
         console.log(err)
       })
@@ -109,47 +109,47 @@ export function addOrRemoveLike(postId, action) {
 }
 
 
-export function updatePost(postId, title, content){
+export function updatePost(postId, title, content) {
   return async (dispatch) => {
     dispatch({
       type: C.SINGLE_POST_UPDATE
     })
-    
+
     let token = JSON.parse(localStorage.getItem('token'))
     axiosInstance.put(`/post/${postId}`, { title, content },
-    { headers: { 'Authorization' : `Bearer ${token}`} }
+      { headers: { 'Authorization': `Bearer ${token}` } }
     )
-    .then(res => res.data)
-    .then( data => {
-      dispatch({
-        type: C.SINGLE_POST_UPDATE_SUCCESS,
-        payload: data.post
+      .then(res => res.data)
+      .then(data => {
+        dispatch({
+          type: C.SINGLE_POST_UPDATE_SUCCESS,
+          payload: data.post
+        })
       })
-    })
-    .catch(error => {
-      dispatch({ 
-        type: C.SINGLE_POST_UPDATE_FAILED
+      .catch(error => {
+        dispatch({
+          type: C.SINGLE_POST_UPDATE_FAILED
+        })
       })
-    })
   }
 }
 
-export function deletePost(postId){
+export function deletePost(postId) {
   return async (dispatch) => {
     dispatch({ type: C.SINGLE_POST_DELETE })
-    
+
     let token = JSON.parse(localStorage.getItem('token'))
     axiosInstance.delete(`/post/${postId}`,
-      { headers: { 'Authorization': `Bearer ${token}` } }  
+      { headers: { 'Authorization': `Bearer ${token}` } }
     )
-      .then( res => res.data )
-      .then( data => {
+      .then(res => res.data)
+      .then(data => {
         console.log(data)
         dispatch({
           type: C.SINGLE_POST_DELETE_SUCCESS
         })
       })
-      .catch( error => {
+      .catch(error => {
         dispatch({
           type: C.SINGLE_POST_DELETE_FAILED
         })
@@ -169,7 +169,7 @@ export function addComment(postId, comment) {
     )
       .then(res => res.data)
       .then(data => {
-        dispatch({ 
+        dispatch({
           type: C.ADD_COMMENT_SUCCESS,
           payload: data.comments
         })
@@ -184,6 +184,51 @@ export function addComment(postId, comment) {
   }
 }
 
-export function updateComment(){
-  //
+export function updateComment(postId, commentId, content) {
+  return async (dispatch) => {
+    dispatch({ type: C.UPDATE_COMMENT })
+    let token = JSON.parse(localStorage.getItem('token'))
+    console.log(token)
+    axiosInstance.put(`/post/${postId}/comment/${commentId}`,
+      { content: content },
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    )
+      .then( res => res.data)
+      .then(data => {
+        dispatch({
+          type: C.UPDATE_COMMENT_SUCCESS,
+          payload: {
+            commentId, content
+          }
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: C.UPDATE_COMMENT_FAILED
+        })
+      })
+  }
+}
+
+export function deleteComment(postId, commentId) {
+  return (dispatch) => {
+    dispatch({ type: C.DELETE_COMMENT })
+
+    let token = JSON.parse(localStorage.getItem('token'))
+    axiosInstance.delete(`/post/${postId}/comment/${commentId}`,
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    )
+      .then( res => res.data)
+      .then(data => {
+        dispatch({
+          type: C.DELETE_COMMENT_SUCCESS,
+          payload: commentId
+        })
+      })
+      .catch(error => {
+        dispatch({
+          type: C.DELETE_COMMENT_FAILED
+        })
+      })
+  }
 }
