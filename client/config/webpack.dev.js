@@ -12,6 +12,7 @@ module.exports = merge(common, {
 
   // Spin up a server for quick development
   devServer: {
+    https: true,
     historyApiFallback: true,
     contentBase: paths.build, // where to serve content from
     open: true, //open the browser after server had been started
@@ -23,6 +24,7 @@ module.exports = merge(common, {
       errors: true,
     },
   },
+  cache: false,
   plugins: [
     // Only update what has changed on hot reload
     new webpack.HotModuleReplacementPlugin(),

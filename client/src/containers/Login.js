@@ -1,134 +1,32 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import axiosInstance from '../utils/axios'
 import { Link, Redirect } from 'react-router-dom'
-import axios from 'axios'
+import { SET_ERROR } from '../constants/constants'
+import { login } from '../actions/authActions'
 
 /**
  * If token in localStorage exists, redirect to home directory
  * if not, get token from server and save it to localStorage
  */
 
-// initial state declared
-const initialState = {
-  username: "",
-  password: "",
-  isLoading: false,
-  error: "",
-  isLoggedin: false,
-  stateChanging: false,
-}
-
-// reducer function defined
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'STATE/CHANGE':
-      return {
-        ...state,
-        message: "",
-        isLoggedin: false,
-        stateChanging: true,
-        [action.fieldName]: action.payload
-      }
-    case 'LOGIN/REQ':
-      return {
-        ...state,
-        error: "",
-        isLoading: true
-      }
-    case 'REQ/SUCCESS':
-      return {
-        ...state,
-        username: "",
-        password: "",
-        isLoading: false,
-        isLoggedin: true,
-        error: ""
-      }
-    case 'REQ/FAILED':
-      return {
-        ...state,
-        isLoading: false,
-        message: "",
-        error: action.payload
-      }
-    case 'SET/ERROR':
-      return {
-        ...state,
-        error: action.payload
-      }
-    default:
-      return state
-  }
-}
 
 // Default export Login component
 export default function Login() {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const dispatch = useDispatch()
+  const state = useSelector( state => state.authReducer )
 
-  useEffect(() => {
-    let token = localStorage.getItem('token')
-    if (token) {
-      dispatch({ type: 'REQ/SUCCESS' })
-    }
-  }, [])
-
-  // handleing input value change
-  const handleInputChange = (e) => {
-    dispatch({
-      type: "STATE/CHANGE",
-      fieldName: [e.target.id],
-      payload: e.target.value
-    })
-  }
-
-  // handling form submission
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault()
-
-    if (!state.username || !state.password) {
-      return dispatch({
-        type: "SET/ERROR",
-        payload: "Username and Password must be filled"
-      })
-    }
-
-    dispatch({ type: 'LOGIN/REQ' })
-
-    const data = {
-      username: state.username,
-      password: state.password
-    }
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/user/login",
-        data, { "Content-type": "application/json" }
-      )
-      const resData = await res.data
-
-      if (resData && res.status === 200) {
-        localStorage.setItem('token', JSON.stringify(resData.token))
-        localStorage.setItem('user', JSON.stringify(resData.username))
-        
-        const date = new Date().getDate()
-        localStorage.setItem('date', JSON.stringify(date))
-        dispatch({ type: 'REQ/SUCCESS' })
-      }
-    } catch (error) {
-      if (error.response) {
-        dispatch({
-          type: 'REQ/FAILED',
-          payload: error.response.data.message
-        })
-      } else {
-        dispatch({
-          type: 'REQ/FAILED',
-          payload: 'Something went wrong.'
-        })
-      }
-    }
+    dispatch(login(username, password))
   }
-  if (state.isLoggedin) {
+
+  if(state.isAuthenticated){
     return <Redirect to="/" />
   }
+
   return (
     <>
       <div className="row" style={{ marginTop: "2rem" }}>
@@ -151,15 +49,23 @@ export default function Login() {
 
             {/* Username input */}
             <div className="input-field">
-              <input id="username" type="text" className="validate"
-                value={state.username} onChange={handleInputChange} />
+              <input 
+                id="username" 
+                type="text" 
+                className="validate"
+                value={username} 
+                onChange={ (e) => setUsername(e.target.value) } />
               <label htmlFor="username">Username</label>
             </div>
 
             {/* Password input */}
             <div className="input-field">
-              <input id="password" type="password" className="validate"
-                value={state.password} onChange={handleInputChange} />
+              <input 
+                id="password" 
+                type="password" 
+                className="validate"
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} />
               <label htmlFor="password">Password</label>
             </div>
 

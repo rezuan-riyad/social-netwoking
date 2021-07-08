@@ -1,21 +1,12 @@
 import * as C from '../constants/constants'
-import axios from 'axios'
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
-  headers: { 'Content-Type': 'application/json' }
-})
+import axiosInstance from '../utils/axios'
 
 export function createPost(post) {
   return async (dispatch) => {
     dispatch({ type: C.SAVE_NEW_POST })
 
-    let token = JSON.parse(localStorage.getItem('token'))
     // url, data, headers
-    axiosInstance.post('/post/create',
-      { ...post },
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
+    axiosInstance.post('/post/create', { ...post })
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -37,9 +28,8 @@ export function createPost(post) {
 export function getAllPosts() {
   return async (dispatch) => {
     dispatch({ type: C.GET_ALL_POSTS })
-    let token = JSON.parse(localStorage.getItem('token'))
 
-    axiosInstance.get('/post', { headers: { 'Authorization': `Bearer ${token}` } })
+    axiosInstance.get('/post')
       .then(res => {
         dispatch({
           type: C.GET_ALL_POSTS_SUCCESS,
@@ -52,6 +42,7 @@ export function getAllPosts() {
   }
 }
 
+
 export function getSinglePostById(postId) {
   return async (dispatch) => {
 
@@ -61,9 +52,7 @@ export function getSinglePostById(postId) {
       payload: localUser
     })
 
-
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.get(`/post/${postId}`, { headers: { 'Authorization': `Bearer ${token}` } })
+    axiosInstance.get(`/post/${postId}`)
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -81,10 +70,8 @@ export function getSinglePostById(postId) {
 
 export function addOrRemoveLike(postId, action) {
   return async (dispatch) => {
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.patch(`/post/${postId}`, { action },
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
+
+    axiosInstance.patch(`/post/${postId}`, { action })
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -115,10 +102,7 @@ export function updatePost(postId, title, content) {
       type: C.SINGLE_POST_UPDATE
     })
 
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.put(`/post/${postId}`, { title, content },
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
+    axiosInstance.put(`/post/${postId}`, { title, content })
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -138,10 +122,7 @@ export function deletePost(postId) {
   return async (dispatch) => {
     dispatch({ type: C.SINGLE_POST_DELETE })
 
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.delete(`/post/${postId}`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
+    axiosInstance.delete(`/post/${postId}`)
       .then(res => res.data)
       .then(data => {
         console.log(data)
@@ -162,11 +143,7 @@ export function addComment(postId, comment) {
   return async (dispatch) => {
     dispatch({ type: C.ADD_COMMENT_REQ })
 
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.put(`/post/${postId}/comment`,
-      { content: comment },
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
+    axiosInstance.put(`/post/${postId}/comment`, { content: comment })
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -187,13 +164,11 @@ export function addComment(postId, comment) {
 export function updateComment(postId, commentId, content) {
   return async (dispatch) => {
     dispatch({ type: C.UPDATE_COMMENT })
-    let token = JSON.parse(localStorage.getItem('token'))
-    console.log(token)
+
     axiosInstance.put(`/post/${postId}/comment/${commentId}`,
-      { content: content },
-      { headers: { 'Authorization': `Bearer ${token}` } }
+      { content: content }
     )
-      .then( res => res.data)
+      .then(res => res.data)
       .then(data => {
         dispatch({
           type: C.UPDATE_COMMENT_SUCCESS,
@@ -214,11 +189,8 @@ export function deleteComment(postId, commentId) {
   return (dispatch) => {
     dispatch({ type: C.DELETE_COMMENT })
 
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.delete(`/post/${postId}/comment/${commentId}`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    )
-      .then( res => res.data)
+    axiosInstance.delete(`/post/${postId}/comment/${commentId}`)
+      .then(res => res.data)
       .then(data => {
         dispatch({
           type: C.DELETE_COMMENT_SUCCESS,

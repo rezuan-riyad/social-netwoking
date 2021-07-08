@@ -11,7 +11,8 @@ const userState = {
     date: ""
   },
   isLoading: false,
-  authors: []
+  authors: [],
+  notFound: false,
 }
 
 export default function userReducer(state = userState, action) {
@@ -20,7 +21,8 @@ export default function userReducer(state = userState, action) {
     case GET_USER_DATA:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        notFound: false
       }
     case GET_USER_DATA_SUCCESS:
       return {
@@ -29,6 +31,13 @@ export default function userReducer(state = userState, action) {
         posts: action.payload.posts,
         user: action.payload.user
       }
+      case GET_USER_DATA_FAILED:
+        return {
+          ...state,
+          isLoading: false,
+          notFound: true
+        }
+    
     /** ******************** */
     case ADD_OR_REMOVE_LIKE:
       return {

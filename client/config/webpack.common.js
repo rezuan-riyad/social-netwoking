@@ -1,17 +1,23 @@
-const paths = require("./paths")
+// const paths = require("./paths")
+const path = require("path")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
   // webpack looks to start building the bundle
-  entry: [paths.src + "/index.js"],
-
+  entry: [path.resolve(__dirname, "../src") + "/index.js"],
   // where webpack output the assets and bundles
   output: {
-    path: paths.build,
+    path: path.resolve(__dirname, "../build"),
     filename: "[name].bundle.js",
     publicPath: "/",
+  },
+
+  resolve: {
+    fallback: {
+      "path" : require.resolve("path-browserify")
+    },
   },
 
   plugins: [
@@ -34,7 +40,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Random Title",
     //  favicon: paths.public + "/favicon.png",
-      template: paths.public + "/index.html", // template file
+      template: path.resolve(__dirname, "../public") + "/index.html", // template file
       filename: "index.html", // output file
     }),
   ], // end of plugins

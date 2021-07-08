@@ -86,7 +86,7 @@ export default function Signup() {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/user/create",
+        "https://localhost:5000/api/user/create",
         data, { "Content-type": "application/json" }
       )
       if (res.status === 201 && res.statusText === 'Created') {

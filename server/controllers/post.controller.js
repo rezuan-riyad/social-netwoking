@@ -1,4 +1,4 @@
-const Post = require('../models/postModel')
+const Post = require('../models/post.model')
 
 /**
  * @desc get all posts (all users)
@@ -6,10 +6,11 @@ const Post = require('../models/postModel')
  * @access Private
  */
 exports.getAllPosts = async function (req, res, next) {
+  console.log(req.cookies)
   Post.find()
     .populate('author', 'username')
     .populate('comments.commentedBy', 'username')
-    .sort({ date : -1 })
+    .sort({ date: -1 })
     .exec((error, posts) => {
       if (error) next(error)
       else if (posts) {
@@ -24,6 +25,7 @@ exports.getAllPosts = async function (req, res, next) {
  * @access Private
  */
 exports.getPostById = async function (req, res, next) {
+  console.log(req.cookies)
   Post.findById(req.params.postId)
     .populate('author', 'username')
     .populate('comments.commentedBy', 'username')
@@ -45,6 +47,7 @@ exports.getPostById = async function (req, res, next) {
  * @access Private
  */
 exports.createPost = async function (req, res, next) {
+  
   const { title, content } = req.body
   if (!title || !content) {
     res.status(400)
@@ -131,7 +134,7 @@ exports.reactionToPost = async function (req, res, next) {
   const postId = req.params.postId
   const perpatrator = req.user.username  // :-)
 
-  try{
+  try {
     let update, message
     if (req.body.action === 'addLike') {
       update = {
@@ -139,18 +142,18 @@ exports.reactionToPost = async function (req, res, next) {
         $addToSet: { likers: perpatrator }
       }
       message = 'Like Added'
-    } else if(req.body.action == 'removeLike'){
+    } else if (req.body.action == 'removeLike') {
       update = {
         $inc: { totalLikes: -1 },
         $pull: { likers: perpatrator }
       }
       message = 'Like Removed.'
     }
-    const post = await Post.findByIdAndUpdate( { _id: postId }, update, { new: true })
-    if(post) {
+    const post = await Post.findByIdAndUpdate({ _id: postId }, update, { new: true })
+    if (post) {
       return res.status(200).json({ likers: post.likers, totalLikes: post.totalLikes, message })
     }
-  }catch(error){
+  } catch (error) {
     next(error)
   }
 }

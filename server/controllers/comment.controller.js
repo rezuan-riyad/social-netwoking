@@ -1,4 +1,4 @@
-const Post = require('../models/postModel')
+const Post = require('../models/post.model')
 
 /**
  * @desc find post by id, then populate commentedBy property

@@ -1,9 +1,9 @@
 //Error thrown by synchronous code will be handled by
 //express by default, for async code error need to be catched.
 
-const Post = require('../models/postModel')
-const User = require('../models/userModel')
-const { getAccessToken } = require('../utils/getAccessToken')
+const Post = require('../models/post.model')
+const User = require('../models/user.model')
+const { getAccessToken } = require('../utils/getToken')
 
 
 /**
@@ -28,7 +28,7 @@ exports.getProfile = async function (req, res, next) {
       })
     } else {
       res.status(400)
-      next(new Error('Invalid URL'))
+      return next( new Error('User does not exist') )
     }
   } catch (error) {
     next(error)
@@ -40,10 +40,10 @@ exports.getProfile = async function (req, res, next) {
  * @route POST /api/users/
  * @access Public
  */
-exports.getAllUsers = async function(req, res, next){
+exports.getAllUsers = async function (req, res, next) {
   try {
     const users = await User.find()
-    if(users){
+    if (users) {
       const _users = users.map(user => {
         return new Object({
           username: user.username,
@@ -52,7 +52,7 @@ exports.getAllUsers = async function(req, res, next){
       })
       return res.status(200).json({ users: _users })
     }
-  } catch(error){
+  } catch (error) {
     next(error)
   }
 }
@@ -92,37 +92,6 @@ exports.createUser = async function (req, res, next) {
           user: newUser
         })
       }
-    }
-  } catch (error) {
-    next(error)
-  }
-}
-
-/** 
- * @desc user login
- * @route POST /api/user/login
- * @access Public
- */
-
-exports.login = async function (req, res, next) {
-  const { username, password } = req.body
-
-  try {
-    const user = await User.findOne({ username })
-
-    if (user) {
-      if (user.passCheck(password)) {
-        return res.status(200).json({
-          username: user.username,
-          token: getAccessToken(user._id)
-        })
-      } else {
-        res.status(400)
-        throw new Error('Ivalid username and password combination')
-      }
-    } else {
-      res.status(404)
-      throw new Error('User doesn\'t exist.')
     }
   } catch (error) {
     next(error)

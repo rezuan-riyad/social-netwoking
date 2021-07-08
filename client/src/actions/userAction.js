@@ -1,21 +1,14 @@
-import { GET_USER_DATA, GET_USER_DATA_SUCCESS, GET_USER_DATA_FAILED,
-GET_ALL_AUTHORS, GET_ALL_AUTHORS_FAILED, GET_ALL_AUTHORS_SUCCESS } from '../constants/constants'
-import axios from 'axios'
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
+import {
+  GET_USER_DATA, GET_USER_DATA_SUCCESS, GET_USER_DATA_FAILED,
+  GET_ALL_AUTHORS, GET_ALL_AUTHORS_FAILED, GET_ALL_AUTHORS_SUCCESS
+} from '../constants/constants'
+import axiosInstance from '../utils/axios'
 
 export function getAllAuthors() {
   return async (dispatch) => {
     dispatch({ type: GET_ALL_AUTHORS })
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.get('/users', {
-      headers: { 'authorization': `Bearer ${token}` }
-    })
+
+    axiosInstance.get('/users')
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -24,7 +17,7 @@ export function getAllAuthors() {
         })
       })
       .catch(err => {
-        dispatch({ 
+        dispatch({
           type: GET_ALL_AUTHORS_FAILED
         })
       })
@@ -35,10 +28,7 @@ export function getAuthorData(username) {
   return async (dispatch) => {
     dispatch({ type: GET_USER_DATA })
 
-    let token = JSON.parse(localStorage.getItem('token'))
-    axiosInstance.get(`/user/${username}`, {
-      headers: { 'authorization': `Bearer ${token}` }
-    })
+    axiosInstance.get(`/user/${username}`)
       .then(res => res.data)
       .then(data => {
         dispatch({
@@ -47,7 +37,9 @@ export function getAuthorData(username) {
         })
       })
       .catch(err => {
-        console.log(err)
+        dispatch({
+          type: GET_USER_DATA_FAILED
+        })
       })
   }
 }

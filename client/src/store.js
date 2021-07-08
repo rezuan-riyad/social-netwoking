@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import postReducer from './reducers/postReducer'
 import singlePostReducer from './reducers/singlePostReducer'
 import userReducer from './reducers/userReducer'
+import authReducer from './reducers/authReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const MODE = 'development'
@@ -11,7 +12,8 @@ const MODE = 'development'
 const rootReducer = combineReducers({
   postReducer: postReducer,
   userReducer: userReducer,
-  singlePostReducer: singlePostReducer
+  singlePostReducer: singlePostReducer,
+  authReducer: authReducer
 })
 
 const composeEnhancers = composeWithDevTools({})
