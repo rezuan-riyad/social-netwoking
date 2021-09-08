@@ -14,7 +14,7 @@ const userState = {
   authors: []
 }
 
-export default function userReducer(state = userState, action) {
+export default function authorsReducer(state = userState, action) {
   switch (action.type) {
     /** ******************** */
     case GET_USER_DATA:

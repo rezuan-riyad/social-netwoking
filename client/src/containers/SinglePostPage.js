@@ -10,15 +10,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { timeFormatter } from '../utils/timeFormatter'
 import { POST_INITIAL_STATE } from '../constants/constants'
 import { getSinglePostById, addComment, updatePost, 
-  deletePost, updateComment, deleteComment } from '../actions/postAction'
+  deletePost, updateComment, deleteComment } from '../actions/postsAction'
 
 
 export default function SinglePostPage() {
   const dispatch = useDispatch()
-  const post = useSelector(state => state.singlePostReducer.post)
-  const commentAdding = useSelector(state => state.singlePostReducer.commentAdding)
-  const isLiked = useSelector(state => state.singlePostReducer.isLiked)
-  const notFound = useSelector(state => state.singlePostReducer.notFound)
+  const post = useSelector(state => state.singlePost.post)
+  const commentAdding = useSelector(state => state.singlePost.commentAdding)
+  const isLiked = useSelector(state => state.singlePost.isLiked)
+  const notFound = useSelector(state => state.singlePost.notFound)
 
   const { id } = useParams()
   const history = useHistory()

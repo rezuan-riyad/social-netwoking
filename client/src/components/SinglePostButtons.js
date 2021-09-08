@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addOrRemoveLike } from '../actions/postAction'
+import { addOrRemoveLike } from '../actions/postsAction'
 
 /**
  * Handle Add Like to Content, Edit and Delete Content
@@ -9,8 +9,8 @@ import { addOrRemoveLike } from '../actions/postAction'
 export default function SinglePostButtons(props) {
   const { showEditBar, setShowEditBar, post, isLiked, handlePostDelete } = props
   const { comments, likers, totalLikes, author } = post
-  const isAuthor = useSelector(state => state.singlePostReducer.localUser.isAuthor)
-  console.log(isAuthor)
+  const isAuthor = useSelector(state => state.singlePost.localUser.isAuthor)
+ 
   const dispatch = useDispatch()
 
   const handleLike = () => {

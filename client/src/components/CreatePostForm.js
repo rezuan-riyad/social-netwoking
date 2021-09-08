@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'materialize-css'
 import { useDispatch, useSelector } from 'react-redux'
-import { createPost } from '../actions/postAction'
+import { createPost } from '../actions/postsAction'
 
 export default function CreatePostForm() {
   const dispatch = useDispatch()
-  const isSubmitting = useSelector(state => state.postReducer.isSubmitting)
+  const isSubmitting = useSelector(state => state.posts.isSubmitting)
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
 

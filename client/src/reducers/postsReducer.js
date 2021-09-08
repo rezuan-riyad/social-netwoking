@@ -10,7 +10,7 @@ const initialState = {
   isSubmitting: false,
   isSubmitted: false
 }
-export default function postReducer(state = initialState, action) {
+export default function postsReducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_POSTS:
       return {

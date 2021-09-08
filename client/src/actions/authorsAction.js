@@ -51,3 +51,9 @@ export function getAuthorData(username) {
       })
   }
 }
+
+export function logout(){
+  return async(dispatch) => {
+    // revoke web token
+  }
+}

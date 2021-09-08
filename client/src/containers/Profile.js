@@ -1,24 +1,20 @@
 import React, { useEffect } from 'react'
 import Layout from '../components/Layout'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAuthorData } from '../actions/userAction'
+import { getAuthorData } from '../actions/authorsAction'
 import { Redirect, useParams } from 'react-router-dom'
 import PostCard from '../components/PostCard'
 
 export default function Profile() {
   const dispatch = useDispatch()
   const { username } = useParams()
-  const user = JSON.parse(localStorage.getItem('user'))
 
-  const state = useSelector(state => state.userReducer)
+  const state = useSelector(state => state.authors)
 
   useEffect(() => {
     dispatch(getAuthorData(username))
   }, [username])
 
-  // if (user !== username) {
-  //   return <Redirect to="/authors" />
-  // }
   return (
     <>
       <Layout>

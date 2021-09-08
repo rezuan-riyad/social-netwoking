@@ -1,7 +1,6 @@
 import React from 'react'
 import { useHistory } from "react-router-dom"
 import Layout from "./Layout"
-import Fallback from './Fallback'
 
 export default function NotFound(){
     const history = useHistory()

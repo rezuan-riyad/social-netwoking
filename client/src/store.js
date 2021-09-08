@@ -1,17 +1,17 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
-import postReducer from './reducers/postReducer'
+import postsReducer from './reducers/postsReducer'
 import singlePostReducer from './reducers/singlePostReducer'
-import userReducer from './reducers/userReducer'
+import authorsReducer from './reducers/authorsReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const MODE = 'development'
 
 // combine all reducers
 const rootReducer = combineReducers({
-  postReducer: postReducer,
-  userReducer: userReducer,
-  singlePostReducer: singlePostReducer
+  posts: postsReducer,
+  authors: authorsReducer,
+  singlePost: singlePostReducer
 })
 
 const composeEnhancers = composeWithDevTools({})

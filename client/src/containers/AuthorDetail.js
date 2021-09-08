@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Layout from '../components/Layout'
 import { Redirect, useParams } from 'react-router-dom'
-import { getAuthorData } from '../actions/userAction'
+import { getAuthorData } from '../actions/authorsAction'
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from '../components/PostCard'
 
@@ -9,7 +9,7 @@ export default function AuthorDetail() {
   const { username } = useParams()
   const user = JSON.parse(localStorage.getItem('user'))
   const dispatch = useDispatch()
-  const state = useSelector(state => state.userReducer)
+  const state = useSelector(state => state.users)
 
   useEffect(() => {
     username !== user ?

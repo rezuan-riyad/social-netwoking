@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 export default function CommentBox(props) {
   const { comment, auhtor, handleEditComment, handleDeleteComment } = props
-  const localUser = useSelector(state => state.singlePostReducer.localUser)
+  const localUser = useSelector(state => state.singlePost.localUser)
   const { commentedBy, content, createdAt, _id } = comment
 
   const isEditable = localUser.username === commentedBy.username

@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import profileImg from '../assets/img.jpg'
 import { timeFormatter } from '../utils/timeFormatter'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { addOrRemoveLike } from '../actions/postAction'
+import { addOrRemoveLike } from '../actions/postsAction'
 
 export default function PostCard({ post }) {
   const dispatch = useDispatch()

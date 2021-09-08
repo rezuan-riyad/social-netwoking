@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 export default function EditForm({ showEditBar, setShowEditBar, handlePostEdit }) {
-  const post = useSelector(state => state.singlePostReducer.post)
+  const post = useSelector(state => state.singlePost.post)
   const [localState, setLocalState] = useState({ title: post.title, content: post.content })
 
   const handleChange = (e) => {
