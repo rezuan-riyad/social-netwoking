@@ -10,7 +10,7 @@ export default function Home() {
   const dispatch = useDispatch()
   const posts = useSelector(state => state.posts.posts)
   const isLoading = useSelector(state => state.posts.isLoading)
-  console.log(isLoading)
+  console.log(posts)
   useEffect(() => {
     dispatch(getAllPosts())
   }, [])
@@ -20,7 +20,7 @@ export default function Home() {
   })
 
   const imageDiv = {
-    width: "80px", height: "80px", margin: "0 auto"
+    width: "50px", height: "50px", margin: "0 auto"
   }
   const img = {
     width: "100%", height: "100%"

@@ -4,7 +4,7 @@ const path = require('path')
 const connectDB = require("./config/db")
 const cors = require('cors')
 
-dotenv.config({path : './server/config/.env'})
+dotenv.config()
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware')
 
 // route
@@ -25,23 +25,20 @@ app.use(cors())
 // body parsing middleware
 app.use(express.json())
 
+// serve static files
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('../../client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'));
+  });
+}
 
 app.use('/api', userRoutes)
 app.use('/api/post', postRoutes)
 app.use(notFound)
 app.use(errorHandler)
-
-
-// Serve static assets if in production
-// if (process.env.NODE_ENV === 'production') {
-//   // Set static folder
-//   app.use(express.static('../client/build'));
-
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-//   });
-// }
-
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)

@@ -2,7 +2,7 @@ import * as C from '../constants/constants'
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://mern-social-networking.herokuapp.com/api",
   headers: { 'Content-Type': 'application/json' }
 })
 

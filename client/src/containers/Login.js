@@ -99,7 +99,7 @@ export default function Login() {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/user/login",
+        "https://mern-social-networking.herokuapp.com/api/user/login",
         data, { "Content-type": "application/json" }
       )
       const resData = await res.data

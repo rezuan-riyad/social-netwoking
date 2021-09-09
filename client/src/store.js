@@ -5,7 +5,7 @@ import singlePostReducer from './reducers/singlePostReducer'
 import authorsReducer from './reducers/authorsReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const MODE = 'development'
+const MODE = 'production'
 
 // combine all reducers
 const rootReducer = combineReducers({

@@ -86,7 +86,7 @@ export default function Signup() {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/user/create",
+        "https://mern-social-networking.herokuapp.com/api/user/create",
         data, { "Content-type": "application/json" }
       )
       if (res.status === 201 && res.statusText === 'Created') {
