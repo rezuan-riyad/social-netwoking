@@ -1,5 +1,7 @@
 import React, { useReducer } from 'react'
 import { Link } from 'react-router-dom'
+import { Input, Button } from "./Login";
+// import Button from "./Login/Button"
 import axios from 'axios'
 
 // initial state declared
@@ -70,6 +72,7 @@ export default function Signup() {
   // handling form submission
   const handleFormSubmit = async (e) => {
     e.preventDefault()
+    console.log(state)
 
     if (!state.username || !state.password) {
       return dispatch({
@@ -86,13 +89,14 @@ export default function Signup() {
     }
     try {
       const res = await axios.post(
-        "https://mern-social-networking.herokuapp.com/api/user/create",
+        `localhost:5000/api/user/create`,
         data, { "Content-type": "application/json" }
       )
       if (res.status === 201 && res.statusText === 'Created') {
         dispatch({ type: 'REQ/SUCCESS' })
       }
     } catch (error) {
+      console.log(error)
       if (error.response) {
         dispatch({
           type: 'REQ/FAILED',
@@ -115,7 +119,7 @@ export default function Signup() {
               Social Networking | Sign Up
             </h5>
             <p className="center">Account created successfully.
-            <Link to="/login"> Login</Link> now.
+              <Link to="/login"> Login</Link> now.
             </p>
           </div>
         </div>
@@ -127,31 +131,28 @@ export default function Signup() {
     <>
       <div className="row" style={{ marginTop: "2rem" }}>
         <div className="col s12 m6 offset-m3">
-          <form className="form-container" onSubmit={handleFormSubmit}>
-            <h5 className="center" style={{ marginBottom: "1.5rem" }}>
-              Social Networking | Sign Up
-            </h5>
-
-            {/* setting username */}
-            <div className="input-field">
-              <input id="username" type="text" className="validate"
-                value={state.username} onChange={handleInputChange} />
+          <form className="form-container" onSubmit={handleFormSubmit} style={{ maxWidth: "350px", margin: "0 auto" }}>
+            <h2 className="center" style={{ marginBottom: "1.5rem" }}>
+              Sign Up
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              {/* setting username */}
               <label htmlFor="username">Set Username</label>
-            </div>
+              <Input id="username" type="text"
+                value={state.username} onChange={handleInputChange} />
 
-            {/* setting password */}
-            <div className="input-field">
-              <input id="password" type="password" className="validate"
-                value={state.password} onChange={handleInputChange} />
+              {/* setting password */}
               <label htmlFor="password">Set Password</label>
-            </div>
+              <Input id="password" type="password"
+                value={state.password} onChange={handleInputChange} />
 
-            {/* button */}
-            <button className="btn waves-effect waves-dark"
-              type="submit"
-              style={{ width: "100%" }}>
-              confirm
-            </button>
+              {/* button */}
+              <Button
+                type="submit"
+                style={{ width: "100%" }}>
+                confirm
+              </Button>
+            </div>
             <p>
               Already have an account? <Link to="/login">Login</Link> now.
             </p>

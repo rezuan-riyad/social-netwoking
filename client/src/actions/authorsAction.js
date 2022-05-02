@@ -3,7 +3,7 @@ GET_ALL_AUTHORS, GET_ALL_AUTHORS_FAILED, GET_ALL_AUTHORS_SUCCESS } from '../cons
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: "https://mern-social-networking.herokuapp.com/api",
+  baseURL: `${process.env.BASE_URL}/api`,
   headers: {
     'Content-Type': 'application/json'
   }

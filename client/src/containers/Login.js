@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 /**
@@ -63,7 +63,7 @@ const reducer = (state = initialState, action) => {
 // Default export Login component
 export default function Login() {
   const [state, dispatch] = useReducer(reducer, initialState)
-
+  const navigate = useNavigate();
   useEffect(() => {
     let token = localStorage.getItem('token')
     if (token) {
@@ -84,6 +84,8 @@ export default function Login() {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
 
+    navigate("/")
+
     if (!state.username || !state.password) {
       return dispatch({
         type: "SET/ERROR",
@@ -99,15 +101,16 @@ export default function Login() {
     }
     try {
       const res = await axios.post(
-        "https://mern-social-networking.herokuapp.com/api/user/login",
+        `${process.env.BASE_URL}/api/user/login`,
         data, { "Content-type": "application/json" }
       )
       const resData = await res.data
+      console.log(resData)
 
       if (resData && res.status === 200) {
         localStorage.setItem('token', JSON.stringify(resData.token))
         localStorage.setItem('user', JSON.stringify(resData.username))
-        
+
         const date = new Date().getDate()
         localStorage.setItem('date', JSON.stringify(date))
         dispatch({ type: 'REQ/SUCCESS' })
@@ -127,18 +130,20 @@ export default function Login() {
     }
   }
   if (state.isLoggedin) {
-    return <Redirect to="/" />
+    // return <Redirect to="/" />
+    console.log("Authenticated..........")
   }
+
   return (
     <>
       <div className="row" style={{ marginTop: "2rem" }}>
         <div className="col s12 m6 offset-m3">
-          <form className="form-container">
+          <form className="form-container" style={{ maxWidth: "350px", margin: "0 auto" }}>
 
             {/* Form heading */}
-            <h5 className="center" style={{ marginBottom: "1.5rem" }}>
-              Social Networking | Log In
-            </h5>
+            <h2 className="center" style={{ marginBottom: "1.5rem" }}>
+              Log In
+            </h2>
 
             {
               /* Error Display */
@@ -148,26 +153,21 @@ export default function Login() {
                   {state.error}
                 </p> : null
             }
-
             {/* Username input */}
-            <div className="input-field">
-              <input id="username" type="text" className="validate"
-                value={state.username} onChange={handleInputChange} />
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <label htmlFor="username">Username</label>
-            </div>
-
-            {/* Password input */}
-            <div className="input-field">
-              <input id="password" type="password" className="validate"
-                value={state.password} onChange={handleInputChange} />
+              <Input id="username" type="text" placeholder='username'
+                value={state.username} onChange={handleInputChange} />
               <label htmlFor="password">Password</label>
+              <Input id="password" type="password" placeholder='password'
+                value={state.password} onChange={handleInputChange} />
+              {/* Submit button */}
+              <Button
+                type="submit" disabled={state.isLoading} onClick={handleFormSubmit}>
+                {state.isLoading ? "Submitting..." : "Submit"}
+              </Button>
             </div>
 
-            {/* Submit button */}
-            <button className="btn waves-effect waves-light"
-              type="submit" disabled={state.isLoading} onClick={handleFormSubmit}>
-              {state.isLoading ? "Submitting..." : "Submit"}
-            </button>
             <p>
               Don't have any account? <Link to="/signup">Register</Link> now.
             </p>
@@ -175,5 +175,24 @@ export default function Login() {
         </div>
       </div>
     </>
+  )
+}
+
+const inputStyle = {
+  padding: "4px 8px",
+  margin: "4px 0 8px 0",
+  outline: "none",
+  border: "1px solid lightgray",
+  borderRadius: "4px"
+}
+export const Input = (props) => {
+  return (
+    <input {...props}
+      style={inputStyle} />
+  )
+}
+export const Button = (props) => {
+  return (
+    <button {...props} style={{...inputStyle, cursor: "pointer" }} />
   )
 }

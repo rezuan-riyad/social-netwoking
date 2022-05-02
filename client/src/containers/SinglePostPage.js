@@ -95,7 +95,7 @@ export default function SinglePostPage() {
               </button>
 
               {/* Logo Section */}
-              <div className="container" className="logo-section">
+              <div className="container logo-section">
                 <div className="logo">
                   <div><span>{post.author.username.substring(0, 1).toUpperCase()}</span></div>
                   {/*<img src={profileImg} alt=""/> */}
